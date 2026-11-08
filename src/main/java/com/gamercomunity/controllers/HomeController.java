@@ -19,4 +19,5 @@ public class HomeController {
         model.addAttribute("eventosProximos", eventoService.listarProximos());
         return "home";
     }
+
 }
