@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Mi Perfil - Gamer Community</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+
+<header class="navbar">
+    <div class="logo">🎮 Gamer Community</div>
+    <nav>
+        <a th:href="@{/home}">Inicio</a>
+        <a th:href="@{/eventos}">Eventos</a>
+        <a th:href="@{/perfil}">Mi Perfil</a>
+        <form th:action="@{/logout}" method="post" style="display:inline">
+            <button type="submit" class="btn-logout">Cerrar sesión</button>
+        </form>
+    </nav>
+</header>
+
+<main class="perfil-main">
+    <h1>Mi Perfil</h1>
+
+    <p class="msg ok" th:if="${param.actualizado}">Perfil actualizado correctamente.</p>
+
+    <div class="perfil-card">
+        <div class="avatar-preview">
+            <img th:src="${usuario.avatarUrl != null ? usuario.avatarUrl : 'https://api.dicebear.com/7.x/bottts/svg?seed=' + usuario.username}"
+                 alt="Avatar">
+        </div>
+
+        <form th:action="@{/perfil}" method="post" th:object="${usuario}">
+            <label>Usuario</label>
+            <input type="text" th:field="*{username}" disabled>
+
+            <label>Correo</label>
+            <input type="email" th:field="*{email}" disabled>
+
+            <label>URL del Avatar</label>
+            <input type="text" th:field="*{avatarUrl}" placeholder="https://...">
+
+            <label>Juegos de interés</label>
+            <input type="text" th:field="*{juegosInteres}" placeholder="Valorant, LoL, CS2...">
+
+            <label>
+                <input type="checkbox" th:field="*{notificarEmail}">
+                Recibir notificaciones por email
+            </label>
+
+            <label>
+                <input type="checkbox" th:field="*{notificarPush}">
+                Recibir notificaciones push
+            </label>
+
+            <button type="submit" class="btn-primary">Guardar cambios</button>
+        </form>
+    </div>
+</main>
+
+</body>
+</html>

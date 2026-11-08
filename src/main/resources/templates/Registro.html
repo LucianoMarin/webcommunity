@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Registro - Gamer Community</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body class="auth-page">
+
+<div class="auth-box">
+    <h2>Crear cuenta</h2>
+
+    <p class="msg error" th:if="${error}" th:text="${error}"></p>
+
+    <form th:action="@{/registro}" method="post" th:object="${usuario}">
+        <label>Nombre de usuario</label>
+        <input type="text" th:field="*{username}" required>
+
+        <label>Correo electrónico</label>
+        <input type="email" th:field="*{email}" required>
+
+        <label>Contraseña</label>
+        <input type="password" th:field="*{password}" required>
+
+        <button type="submit" class="btn-primary">Registrarme</button>
+    </form>
+
+    <p class="link">¿Ya tienes cuenta? <a th:href="@{/login}">Inicia sesión</a></p>
+</div>
+
+</body>
+</html>

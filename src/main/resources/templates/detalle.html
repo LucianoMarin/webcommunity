@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${evento.nombre} + ' - Gamer Community'">Detalle</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+
+<header class="navbar">
+    <div class="logo">🎮 Gamer Community</div>
+    <nav>
+        <a th:href="@{/home}">Inicio</a>
+        <a th:href="@{/eventos}">Eventos</a>
+        <a th:href="@{/perfil}">Mi Perfil</a>
+        <form th:action="@{/logout}" method="post" style="display:inline">
+            <button type="submit" class="btn-logout">Cerrar sesión</button>
+        </form>
+    </nav>
+</header>
+
+<main class="detalle-main">
+    <h1 th:text="${evento.nombre}">Nombre</h1>
+
+    <div class="detalle-info">
+        <p><strong>Categoría:</strong> <span th:text="${evento.categoria}"></span></p>
+        <p><strong>Descripción:</strong> <span th:text="${evento.descripcion}"></span></p>
+        <p><strong>Dirección:</strong> <span th:text="${evento.direccion}"></span></p>
+        <p><strong>Fecha y hora:</strong>
+            <span th:text="${#temporals.format(evento.fechaHora, 'dd/MM/yyyy HH:mm')}"></span>
+        </p>
+        <p><strong>Organizadores:</strong> <span th:text="${evento.organizadores}"></span></p>
+        <p><strong>Expositores principales:</strong>
+            <span th:text="${evento.expositoresPrincipales}"></span>
+        </p>
+    </div>
+
+    <h2>Servicios disponibles</h2>
+    <ul class="servicios">
+        <li th:if="${evento.tieneEstacionamiento}">✅ Estacionamiento</li>
+        <li th:if="${evento.tieneLocomocion}">✅ Locomoción colectiva</li>
+        <li th:if="${evento.tieneComidas}">✅ Servicio de comidas</li>
+        <li th:if="${evento.tieneAlojamiento}">✅ Alojamiento</li>
+    </ul>
+
+    <a th:href="@{/eventos}" class="btn-secondary">← Volver a eventos</a>
+</main>
+
+</body>
+</html>
