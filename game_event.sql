@@ -1,3 +1,17 @@
+-- =====================================
+-- CREAR USUARIO ADMINISTRADOR DE MYSQL
+-- =====================================
+
+CREATE USER IF NOT EXISTS 'sumativa1'@'localhost'
+IDENTIFIED BY 'DuocUc123';
+
+-- Dar permisos completos sobre todas las bases de datos
+GRANT ALL PRIVILEGES ON *.* TO 'sumativa1'@'localhost'
+WITH GRANT OPTION;
+
+-- Actualizar privilegios
+FLUSH PRIVILEGES;
+
 
 DROP DATABASE IF EXISTS gamer_events;
 
