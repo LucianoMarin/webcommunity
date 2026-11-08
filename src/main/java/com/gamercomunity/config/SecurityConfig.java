@@ -15,20 +15,42 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+
         http
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/css/**", "/js/**", "/images/**", "/webjars/**", "/favicon.ico").permitAll()
-                .requestMatchers("/", "/home", "/login", "/registro").permitAll()
+                .requestMatchers(
+                    "/css/**",
+                    "/js/**",
+                    "/images/**",
+                    "/webjars/**",
+                    "/favicon.ico"
+                ).permitAll()
+
+                .requestMatchers(
+                    "/",
+                    "/home",
+                    "/login",
+                    "/registro",
+                    "/error"
+                ).permitAll()
+
                 .requestMatchers(HttpMethod.POST, "/registro").permitAll()
+
+                .requestMatchers("/admin/**").hasRole("ADMIN")
+
                 .anyRequest().authenticated()
             )
+
             .formLogin(form -> form
                 .loginPage("/login")
                 .loginProcessingUrl("/login")
+                .usernameParameter("username")
+                .passwordParameter("password")
                 .defaultSuccessUrl("/home", true)
                 .failureUrl("/login?error")
                 .permitAll()
             )
+
             .logout(logout -> logout
                 .logoutUrl("/logout")
                 .logoutSuccessUrl("/login?logout")

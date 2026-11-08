@@ -1,7 +1,8 @@
-package com.gamercomunity.security;
+package com.gamercomunity.service;
 
 import com.gamercomunity.models.Usuario;
 import com.gamercomunity.repository.UsuarioRepository;
+
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -18,18 +19,22 @@ public class CustomUserDetailsService implements UserDetailsService {
     }
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Usuario usuario = usuarioRepository.findByUsername(username)
-            .orElseThrow(() -> new UsernameNotFoundException("Usuario no encontrado: " + username));
+    public UserDetails loadUserByUsername(String username)
+            throws UsernameNotFoundException {
 
-        String[] roles = usuario.getRoles().stream()
-            .map(Rol -> Rol.getNombre().replace("ROLE_", ""))
-            .toArray(String[]::new);
+        Usuario usuario = usuarioRepository.findByUsername(username)
+                .orElseThrow(() ->
+                    new UsernameNotFoundException("Usuario no encontrado")
+                );
 
         return User.builder()
-            .username(usuario.getUsername())
-            .password(usuario.getPassword())
-            .roles(roles)
-            .build();
+                .username(usuario.getUsername())
+                .password(usuario.getPassword())
+                .authorities(
+                    usuario.getRoles().stream()
+                        .map(rol -> rol.getNombre())
+                        .toArray(String[]::new)
+                )
+                .build();
     }
 }

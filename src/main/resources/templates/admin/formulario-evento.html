@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Formulario Evento - Gamer Community</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+
+<header class="navbar">
+    <div class="logo">Gamer Community - Admin</div>
+    <nav>
+        <a th:href="@{/admin}">Volver al Panel</a>
+    </nav>
+</header>
+
+<main style="max-width: 800px;">
+    <h1 th:text="${evento.id != null ? 'Editar Evento' : 'Crear Nuevo Evento'}">Evento</h1>
+
+    <form th:action="@{/admin/evento/guardar}" method="post" th:object="${evento}" style="display: flex; flex-direction: column; gap: 1rem; background: #1a1a2e; padding: 2rem; border-radius: 10px; border: 1px solid #2a2a4a;">
+        <input type="hidden" th:field="*{id}">
+        
+        <label>Nombre del Evento</label>
+        <input type="text" th:field="*{nombre}" required style="padding: 0.6rem; border-radius: 5px; border: 1px solid #2a2a4a; background: #0f0f1a; color: white;">
+
+        <label>Descripción</label>
+        <textarea th:field="*{descripcion}" rows="4" style="padding: 0.6rem; border-radius: 5px; border: 1px solid #2a2a4a; background: #0f0f1a; color: white;"></textarea>
+
+        <label>Dirección</label>
+        <input type="text" th:field="*{direccion}" style="padding: 0.6rem; border-radius: 5px; border: 1px solid #2a2a4a; background: #0f0f1a; color: white;">
+
+        <label>Fecha y Hora</label>
+        <input type="datetime-local" th:field="*{fechaHora}" style="padding: 0.6rem; border-radius: 5px; border: 1px solid #2a2a4a; background: #0f0f1a; color: white;">
+
+        <label>Organizadores</label>
+        <input type="text" th:field="*{organizadores}" style="padding: 0.6rem; border-radius: 5px; border: 1px solid #2a2a4a; background: #0f0f1a; color: white;">
+
+        <label>Expositores Principales</label>
+        <input type="text" th:field="*{expositoresPrincipales}" style="padding: 0.6rem; border-radius: 5px; border: 1px solid #2a2a4a; background: #0f0f1a; color: white;">
+
+        <label>Categoría</label>
+        <input type="text" th:field="*{categoria}" placeholder="Ej: Esports, Expo, Comunidad" style="padding: 0.6rem; border-radius: 5px; border: 1px solid #2a2a4a; background: #0f0f1a; color: white;">
+
+        <div style="display: flex; gap: 1rem; margin-top: 1rem;">
+            <label><input type="checkbox" th:field="*{tieneEstacionamiento}"> Estacionamiento</label>
+            <label><input type="checkbox" th:field="*{tieneLocomocion}"> Locomoción</label>
+            <label><input type="checkbox" th:field="*{tieneComidas}"> Comidas</label>
+            <label><input type="checkbox" th:field="*{tieneAlojamiento}"> Alojamiento</label>
+        </div>
+
+        <button type="submit" class="btn-primary" style="margin-top: 1rem;">Guardar Evento</button>
+    </form>
+</main>
+
+</body>
+</html>

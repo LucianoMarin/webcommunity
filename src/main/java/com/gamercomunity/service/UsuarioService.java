@@ -8,6 +8,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Service
@@ -60,5 +61,27 @@ public class UsuarioService {
     public Usuario obtenerPorUsername(String username) {
         return usuarioRepository.findByUsername(username)
             .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+    }
+
+    public List<Usuario> listarTodos() {
+        return usuarioRepository.findAll();
+    }
+
+    public void eliminarUsuario(Long id) {
+        usuarioRepository.deleteById(id);
+    }
+
+    public void cambiarRol(Long usuarioId, String nombreRol) {
+        Usuario usuario = usuarioRepository.findById(usuarioId)
+            .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+        
+        Rol rol = rolRepository.findByNombre(nombreRol)
+            .orElseThrow(() -> new RuntimeException("Rol no encontrado"));
+
+        Set<Rol> roles = new HashSet<>();
+        roles.add(rol);
+        usuario.setRoles(roles);
+        
+        usuarioRepository.save(usuario);
     }
 }

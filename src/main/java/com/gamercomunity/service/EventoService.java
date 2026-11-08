@@ -28,4 +28,12 @@ public class EventoService {
         return eventoRepository.findById(id)
             .orElseThrow(() -> new RuntimeException("Evento no encontrado"));
     }
+
+    public Evento guardar(Evento evento) {
+        return eventoRepository.save(evento);
+    }
+
+    public void eliminar(Long id) {
+        eventoRepository.deleteById(id);
+    }
 }

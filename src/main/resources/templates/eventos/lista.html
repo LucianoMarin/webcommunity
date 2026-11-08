@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Eventos - Gamer Community</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+
+<header class="navbar">
+    <div class="logo">Gamer Community</div>
+
+    <nav>
+        <a th:href="@{/home}">Inicio</a>
+        <a th:href="@{/eventos}">Eventos</a>
+
+        <div sec:authorize="hasRole('ADMIN')">
+            <a th:href="@{/admin}">Administración</a>
+        </div>
+
+        <div sec:authorize="isAuthenticated()"
+             style="display:flex; gap:1.2rem; align-items:center;">
+
+            <a th:href="@{/perfil}">Mi Perfil</a>
+
+            <span sec:authentication="name"
+                  style="color:#7f5af0;font-weight:bold;">
+            </span>
+
+            <form th:action="@{/logout}" method="post">
+                <button type="submit" class="btn-logout">
+                    Cerrar sesión
+                </button>
+            </form>
+        </div>
+
+        <div sec:authorize="isAnonymous()">
+            <a th:href="@{/login}" class="btn-secondary">
+                Iniciar sesión
+            </a>
+
+            <a th:href="@{/registro}" class="btn-primary">
+                Registrarse
+            </a>
+        </div>
+    </nav>
+</header>
+
+<main>
+    <h1>Buscar eventos</h1>
+
+    <form th:action="@{/eventos}" method="get" class="filtros">
+        <input type="text" name="categoria" placeholder="Categoría (Esports, Expo...)"
+               th:value="${categoria}">
+
+        <input type="datetime-local" name="fecha" th:value="${fecha}">
+
+        <input type="text" name="ubicacion" placeholder="Ubicación"
+               th:value="${ubicacion}">
+
+        <button type="submit" class="btn-primary">Buscar</button>
+    </form>
+
+    <div class="eventos-grid" th:if="${not #lists.isEmpty(eventos)}">
+        <div class="card" th:each="e : ${eventos}">
+            <h3 th:text="${e.nombre}">Evento</h3>
+            <p><strong>Categoría:</strong> <span th:text="${e.categoria}"></span></p>
+            <p><strong>Fecha:</strong>
+                <span th:text="${#temporals.format(e.fechaHora, 'dd/MM/yyyy HH:mm')}"></span>
+            </p>
+            <p><strong>Dirección:</strong> <span th:text="${e.direccion}"></span></p>
+            <a th:href="@{/eventos/{id}(id=${e.id})}" class="btn-secondary">Ver detalle</a>
+        </div>
+    </div>
+
+    <p th:if="${#lists.isEmpty(eventos)}" class="msg">No se encontraron eventos con esos filtros.</p>
+</main>
+
+</body>
+</html>

@@ -22,17 +22,18 @@ public class EventoController {
 
     @GetMapping
     public String listar(
-            @RequestParam(required = false) String categoria,
-            @RequestParam(required = false)
-            @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm") LocalDateTime fecha,
-            @RequestParam(required = false) String ubicacion,
+            @RequestParam(required = false, defaultValue = "") String categoria,
+            @RequestParam(required = false, defaultValue = "") String ubicacion,
+            @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm") LocalDateTime fecha,
             Model model) {
 
         List<Evento> eventos = eventoService.buscar(categoria, fecha, ubicacion);
+        
         model.addAttribute("eventos", eventos);
         model.addAttribute("categoria", categoria);
         model.addAttribute("fecha", fecha);
         model.addAttribute("ubicacion", ubicacion);
+        
         return "eventos/lista";
     }
 
