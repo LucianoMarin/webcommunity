@@ -9,9 +9,6 @@ IDENTIFIED BY 'DuocUc123';
 GRANT ALL PRIVILEGES ON *.* TO 'sumativa1'@'localhost'
 WITH GRANT OPTION;
 
--- Actualizar privilegios
-FLUSH PRIVILEGES;
-
 
 DROP DATABASE IF EXISTS gamer_events;
 
