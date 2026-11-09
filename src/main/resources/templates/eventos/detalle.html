@@ -1,7 +1,8 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:sec="http://www.thymeleaf.org/extras/spring-security" lang="es" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
     <title th:text="${evento.nombre} + ' - Gamer Community'">Detalle</title>
     <link rel="stylesheet" th:href="@{/css/styles.css}">
 </head>
@@ -19,15 +20,15 @@
         </div>
 
         <div sec:authorize="isAuthenticated()"
-             style="display:flex; gap:1.2rem; align-items:center;">
+             class="layout-7b7f6c178a">
 
             <a th:href="@{/perfil}">Mi Perfil</a>
 
             <span sec:authentication="name"
-                  style="color:#7f5af0;font-weight:bold;">
+                  class="layout-c39082980f">
             </span>
 
-            <form th:action="@{/logout}" method="post">
+            <form novalidate th:action="@{/logout}" method="post">
                 <button type="submit" class="btn-logout">
                     Cerrar sesión
                 </button>
@@ -73,5 +74,6 @@
     <a th:href="@{/eventos}" class="btn-secondary">← Volver a eventos</a>
 </main>
 
+<script defer th:src="@{/js/forms.js}"></script>
 </body>
 </html>

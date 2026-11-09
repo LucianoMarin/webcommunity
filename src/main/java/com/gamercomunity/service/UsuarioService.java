@@ -17,21 +17,29 @@ public class UsuarioService {
     private final UsuarioRepository usuarioRepository;
     private final RolRepository rolRepository;
     private final PasswordEncoder passwordEncoder;
+    private final org.springframework.security.core.session.SessionRegistry sessions;
 
     public UsuarioService(UsuarioRepository usuarioRepository,
                           RolRepository rolRepository,
-                          PasswordEncoder passwordEncoder) {
+                          PasswordEncoder passwordEncoder,
+                          org.springframework.security.core.session.SessionRegistry sessions) {
         this.usuarioRepository = usuarioRepository;
         this.rolRepository = rolRepository;
         this.passwordEncoder = passwordEncoder;
+        this.sessions = sessions;
     }
 
-    public Usuario registrar(Usuario usuario) {
+    public Usuario registrar(com.gamercomunity.dto.RegistroForm datos) {
+        Usuario usuario = new Usuario();
+        usuario.setUsername(datos.getUsername());
+        usuario.setEmail(datos.getEmail().toLowerCase(java.util.Locale.ROOT));
+        usuario.setPassword(datos.getPassword());
+        usuario.setAvatarUrl("/images/avatar.svg");
         if (usuarioRepository.existsByUsername(usuario.getUsername())) {
-            throw new RuntimeException("El nombre de usuario ya existe");
+            throw new IllegalArgumentException("No se pudo crear la cuenta con estos datos. Usa otro usuario o correo.");
         }
         if (usuarioRepository.existsByEmail(usuario.getEmail())) {
-            throw new RuntimeException("El correo ya está registrado");
+            throw new IllegalArgumentException("No se pudo crear la cuenta con estos datos. Usa otro usuario o correo.");
         }
 
         usuario.setPassword(passwordEncoder.encode(usuario.getPassword()));
@@ -46,7 +54,7 @@ public class UsuarioService {
         return usuarioRepository.save(usuario);
     }
 
-    public Usuario actualizarPerfil(String username, Usuario datos) {
+    public Usuario actualizarPerfil(String username, com.gamercomunity.dto.PerfilForm datos) {
         Usuario existente = usuarioRepository.findByUsername(username)
             .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
 
@@ -68,6 +76,8 @@ public class UsuarioService {
     }
 
     public void eliminarUsuario(Long id) {
+        Usuario usuario = usuarioRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Usuario no disponible"));
+        revocarSesiones(usuario.getUsername());
         usuarioRepository.deleteById(id);
     }
 
@@ -83,5 +93,13 @@ public class UsuarioService {
         usuario.setRoles(roles);
         
         usuarioRepository.save(usuario);
+        revocarSesiones(usuario.getUsername());
+    }
+    private void revocarSesiones(String username) {
+        for(Object principal:sessions.getAllPrincipals()) {
+            if(principal instanceof org.springframework.security.core.userdetails.UserDetails user && user.getUsername().equals(username)) {
+                sessions.getAllSessions(principal,false).forEach(org.springframework.security.core.session.SessionInformation::expireNow);
+            }
+        }
     }
 }

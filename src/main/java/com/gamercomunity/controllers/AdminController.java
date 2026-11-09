@@ -39,25 +39,31 @@ public class AdminController {
     }
 
     @PostMapping("/evento/guardar")
-    public String guardarEvento(@ModelAttribute Evento evento) {
+    public String guardarEvento(@jakarta.validation.Valid @ModelAttribute Evento evento,
+            org.springframework.validation.BindingResult errors) {
+        if (errors.hasErrors()) return "admin/formulario-evento";
         eventoService.guardar(evento);
         return "redirect:/admin";
     }
 
-    @GetMapping("/evento/eliminar/{id}")
+    @PostMapping("/evento/eliminar/{id}")
     public String eliminarEvento(@PathVariable Long id) {
         eventoService.eliminar(id);
         return "redirect:/admin";
     }
 
-    @GetMapping("/usuario/eliminar/{id}")
-    public String eliminarUsuario(@PathVariable Long id) {
+    @PostMapping("/usuario/eliminar/{id}")
+    public String eliminarUsuario(@PathVariable Long id, org.springframework.security.core.Authentication auth) {
+        if (usuarioService.obtenerPorUsername(auth.getName()).getId().equals(id))
+            return "redirect:/admin?protegido";
         usuarioService.eliminarUsuario(id);
         return "redirect:/admin";
     }
 
     @PostMapping("/usuario/rol")
-    public String cambiarRol(@RequestParam Long usuarioId, @RequestParam String rol) {
+    public String cambiarRol(@RequestParam Long usuarioId, @RequestParam String rol, org.springframework.security.core.Authentication auth) {
+        if (usuarioService.obtenerPorUsername(auth.getName()).getId().equals(usuarioId))
+            return "redirect:/admin?protegido";
         usuarioService.cambiarRol(usuarioId, rol);
         return "redirect:/admin";
     }

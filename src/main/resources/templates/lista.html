@@ -1,7 +1,8 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
     <title>Eventos - Gamer Community</title>
     <link rel="stylesheet" th:href="@{/css/styles.css}">
 </head>
@@ -13,7 +14,7 @@
         <a th:href="@{/home}">Inicio</a>
         <a th:href="@{/eventos}">Eventos</a>
         <a th:href="@{/perfil}">Mi Perfil</a>
-        <form th:action="@{/logout}" method="post" style="display:inline">
+        <form novalidate th:action="@{/logout}" method="post" class="layout-6b8b63d565">
             <button type="submit" class="btn-logout">Cerrar sesión</button>
         </form>
     </nav>
@@ -22,16 +23,16 @@
 <main>
     <h1>Buscar eventos</h1>
 
-    <form th:action="@{/eventos}" method="get" class="filtros">
-        <input type="text" name="categoria" placeholder="Categoría (Esports, Expo...)"
+    <form novalidate th:action="@{/eventos}" method="get" class="filtros">
+        <input type="text" aria-label="Categoría" name="categoria" placeholder="Categoría (Esports, Expo...)"
                th:value="${categoria}">
 
-        <input type="datetime-local" name="fecha" th:value="${fecha}">
+        <input type="datetime-local" aria-label="Fecha y hora" name="fecha" th:value="${fecha}">
 
-        <input type="text" name="ubicacion" placeholder="Ubicación"
+        <input type="text" aria-label="Ubicación" name="ubicacion" placeholder="Ubicación"
                th:value="${ubicacion}">
 
-        <button type="submit" class="btn-primary">Buscar</button>
+        <button type="submit" class="btn-primary">Buscar</button><a th:href="@{/eventos}" class="btn-secondary">Limpiar filtros</a>
     </form>
 
     <div class="eventos-grid" th:if="${not #lists.isEmpty(eventos)}">
@@ -49,5 +50,6 @@
     <p th:if="${#lists.isEmpty(eventos)}" class="msg">No se encontraron eventos con esos filtros.</p>
 </main>
 
+<script defer th:src="@{/js/forms.js}"></script>
 </body>
 </html>

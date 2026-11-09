@@ -1,7 +1,8 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<html lang="es" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
     <title>Panel de Administración - Gamer Community</title>
     <link rel="stylesheet" th:href="@{/css/styles.css}">
 </head>
@@ -12,9 +13,9 @@
     <nav>
         <a th:href="@{/home}">Inicio</a>
         <a th:href="@{/eventos}">Eventos (Vista Cliente)</a>
-        <div sec:authorize="isAuthenticated()" style="display: flex; gap: 1.2rem; align-items: center;">
-            <span style="color: #7f5af0; font-weight: bold;" sec:authentication="name">Usuario</span>
-            <form th:action="@{/logout}" method="post" style="display:inline; margin: 0;">
+        <div sec:authorize="isAuthenticated()" class="layout-b72872edeb">
+            <span sec:authentication="name" class="layout-d568d2f62b">Usuario</span>
+            <form novalidate th:action="@{/logout}" method="post" class="layout-ef6772ea4d">
                 <button type="submit" class="btn-logout">Cerrar sesión</button>
             </form>
         </div>
@@ -22,15 +23,15 @@
 </header>
 
 <main>
-    <h1>Panel de Administración</h1>
+    <h1>Panel de Administración</h1><p class="msg" role="status" th:if="${param.protegido}">No puedes eliminar tu propia cuenta ni cambiar tu propio rol durante esta sesión.</p>
 
     <section>
         <h2>Gestión de Eventos</h2>
-        <a th:href="@{/admin/evento/nuevo}" class="btn-primary" style="margin-bottom: 1rem; display: inline-block;">+ Crear Nuevo Evento</a>
+        <a th:href="@{/admin/evento/nuevo}" class="layout-ce51609de2 btn-primary">+ Crear Nuevo Evento</a>
         
-        <table style="width: 100%; border-collapse: collapse; margin-bottom: 3rem; text-align: left;">
+        <table class="layout-e281686414">
             <thead>
-                <tr style="border-bottom: 2px solid #7f5af0;">
+                <tr class="layout-42805e3006">
                     <th>ID</th>
                     <th>Nombre</th>
                     <th>Categoría</th>
@@ -39,14 +40,14 @@
                 </tr>
             </thead>
             <tbody>
-                <tr th:each="e : ${eventos}" style="border-bottom: 1px solid #2a2a4a;">
+                <tr th:each="e : ${eventos}" class="layout-a4488cbcec">
                     <td th:text="${e.id}"></td>
                     <td th:text="${e.nombre}"></td>
                     <td th:text="${e.categoria}"></td>
                     <td th:text="${#temporals.format(e.fechaHora, 'dd/MM/yyyy HH:mm')}"></td>
                     <td>
-                        <a th:href="@{/admin/evento/editar/{id}(id=${e.id})}" class="btn-secondary" style="padding: 0.2rem 0.5rem; font-size: 0.8rem;">Editar</a>
-                        <a th:href="@{/admin/evento/eliminar/{id}(id=${e.id})}" class="btn-logout" style="padding: 0.2rem 0.5rem; font-size: 0.8rem;" onclick="return confirm('¿Seguro que deseas eliminar este evento?');">Eliminar</a>
+                        <a th:href="@{/admin/evento/editar/{id}(id=${e.id})}" class="layout-8c499793fc btn-secondary">Editar</a>
+                        <details class="delete-confirm"><summary>Eliminar</summary><p>Esta eliminación es permanente.</p><form novalidate method="post" th:action="@{/admin/evento/eliminar/{id}(id=${e.id})}"><button type="submit" class="btn-logout">Eliminar definitivamente</button></form></details>
                     </td>
                 </tr>
             </tbody>
@@ -55,9 +56,9 @@
 
     <section>
         <h2>Gestión de Usuarios</h2>
-        <table style="width: 100%; border-collapse: collapse; text-align: left;">
+        <table class="layout-59865a7758">
             <thead>
-                <tr style="border-bottom: 2px solid #7f5af0;">
+                <tr class="layout-42805e3006">
                     <th>ID</th>
                     <th>Usuario</th>
                     <th>Email</th>
@@ -66,23 +67,23 @@
                 </tr>
             </thead>
             <tbody>
-                <tr th:each="u : ${usuarios}" style="border-bottom: 1px solid #2a2a4a;">
+                <tr th:each="u : ${usuarios}" class="layout-a4488cbcec">
                     <td th:text="${u.id}"></td>
                     <td th:text="${u.username}"></td>
                     <td th:text="${u.email}"></td>
                     <td>
-                        <span th:each="r : ${u.roles}" th:text="${r.nombre}" style="background: #2a2a4a; padding: 0.2rem 0.5rem; border-radius: 4px; margin-right: 0.2rem; font-size: 0.8rem;"></span>
+                        <span th:each="r : ${u.roles}" th:text="${r.nombre}" class="layout-0796b61ce5"></span>
                     </td>
                     <td>
-                        <form th:action="@{/admin/usuario/rol}" method="post" style="display: inline;">
+                        <form novalidate th:action="@{/admin/usuario/rol}" method="post" class="layout-ab9ae682dd">
                             <input type="hidden" name="usuarioId" th:value="${u.id}">
-                            <select name="rol" style="padding: 0.2rem; background: #0f0f1a; color: white; border: 1px solid #7f5af0;">
+                            <select name="rol" class="layout-a336ec697c">
                                 <option value="ROLE_USER">ROLE_USER</option>
                                 <option value="ROLE_ADMIN">ROLE_ADMIN</option>
                             </select>
-                            <button type="submit" class="btn-primary" style="padding: 0.2rem 0.5rem; font-size: 0.8rem;">Asignar Rol</button>
+                            <button type="submit" class="layout-8c499793fc btn-primary">Asignar Rol</button>
                         </form>
-                        <a th:href="@{/admin/usuario/eliminar/{id}(id=${u.id})}" class="btn-logout" style="padding: 0.2rem 0.5rem; font-size: 0.8rem;" onclick="return confirm('¿Seguro que deseas eliminar esta cuenta?');">Eliminar</a>
+                        <details class="delete-confirm"><summary>Eliminar</summary><p>Esta eliminación es permanente.</p><form novalidate method="post" th:action="@{/admin/usuario/eliminar/{id}(id=${u.id})}"><button type="submit" class="btn-logout">Eliminar definitivamente</button></form></details>
                     </td>
                 </tr>
             </tbody>
@@ -90,5 +91,6 @@
     </section>
 </main>
 
+<script defer th:src="@{/js/forms.js}"></script>
 </body>
 </html>

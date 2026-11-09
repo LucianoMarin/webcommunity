@@ -1,18 +1,6 @@
--- =====================================
--- CREAR USUARIO ADMINISTRADOR DE MYSQL
--- =====================================
-
-CREATE USER IF NOT EXISTS 'sumativa1'@'localhost'
-IDENTIFIED BY 'DuocUc123';
-
--- Dar permisos completos sobre todas las bases de datos
-GRANT ALL PRIVILEGES ON *.* TO 'sumativa1'@'localhost'
-WITH GRANT OPTION;
-
-
-DROP DATABASE IF EXISTS gamer_events;
-
-CREATE DATABASE gamer_events
+-- Instalación opcional MySQL. Ejecutar con cuenta de instalación, nunca con la cuenta de la aplicación.
+-- No elimina bases existentes. Utiliza una base vacía para evitar duplicar datos.
+CREATE DATABASE IF NOT EXISTS gamer_events
     CHARACTER SET utf8mb4
     COLLATE utf8mb4_unicode_ci;
 

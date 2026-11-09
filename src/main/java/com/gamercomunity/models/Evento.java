@@ -12,24 +12,33 @@ public class Evento {
     private Long id;
 
     @Column(nullable = false, length = 200)
+    @jakarta.validation.constraints.Size(max=200)
+    @jakarta.validation.constraints.NotBlank
     private String nombre;
 
     @Column(columnDefinition = "TEXT")
+    @jakarta.validation.constraints.Size(max=5000)
     private String descripcion;
 
     @Column(length = 300)
+    @jakarta.validation.constraints.Size(max=300)
     private String direccion;
 
     @Column(name = "fecha_hora")
+    @jakarta.validation.constraints.NotNull
+    @org.springframework.format.annotation.DateTimeFormat(iso=org.springframework.format.annotation.DateTimeFormat.ISO.DATE_TIME)
     private LocalDateTime fechaHora;
 
     @Column(length = 300)
+    @jakarta.validation.constraints.Size(max=300)
     private String organizadores;
 
     @Column(name = "expositores_principales", length = 500)
+    @jakarta.validation.constraints.Size(max=500)
     private String expositoresPrincipales;
 
     @Column(length = 100)
+    @jakarta.validation.constraints.Size(max=100)
     private String categoria;
 
     @Column(name = "tiene_estacionamiento", nullable = false)

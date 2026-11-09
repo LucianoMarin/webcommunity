@@ -1,7 +1,8 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
     <title>Login - Gamer Community</title>
     <link rel="stylesheet" th:href="@{/css/styles.css}">
 </head>
@@ -14,12 +15,12 @@
     <p class="msg ok" th:if="${param.logout}">Has cerrado sesión.</p>
     <p class="msg ok" th:if="${param.registrado}">Registro exitoso. Inicia sesión.</p>
 
-    <form th:action="@{/login}" method="post">
-        <label>Usuario</label>
-        <input type="text" name="username" required>
+    <form novalidate th:action="@{/login}" method="post">
+        <label for="username">Usuario</label>
+<input id="username" type="text" name="username" autocomplete="username" required>
 
-        <label>Contraseña</label>
-        <input type="password" name="password" required>
+        <label for="password">Contraseña</label>
+<input id="password" type="password" name="password" autocomplete="current-password" required>
 
         <button type="submit" class="btn-primary">Entrar</button>
     </form>
@@ -28,5 +29,6 @@
     <p class="link"><a th:href="@{/home}">Volver al inicio</a></p>
 </div>
 
+<script defer th:src="@{/js/forms.js}"></script>
 </body>
 </html>

@@ -1,7 +1,8 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
     <title>Mi Perfil - Gamer Community</title>
     <link rel="stylesheet" th:href="@{/css/styles.css}">
 </head>
@@ -13,7 +14,7 @@
         <a th:href="@{/home}">Inicio</a>
         <a th:href="@{/eventos}">Eventos</a>
         <a th:href="@{/perfil}">Mi Perfil</a>
-        <form th:action="@{/logout}" method="post" style="display:inline">
+<form novalidate th:action="@{/logout}" method="post" class="layout-6b8b63d565">
             <button type="submit" class="btn-logout">Cerrar sesión</button>
         </form>
     </nav>
@@ -26,22 +27,22 @@
 
     <div class="perfil-card">
         <div class="avatar-preview">
-            <img th:src="${usuario.avatarUrl != null ? usuario.avatarUrl : 'https://api.dicebear.com/7.x/bottts/svg?seed=' + usuario.username}"
-                 alt="Avatar">
+            <img th:src="@{/images/avatar.svg}" alt="Avatar" width="120" height="120">
         </div>
 
-        <form th:action="@{/perfil}" method="post" th:object="${usuario}">
+<form novalidate th:action="@{/perfil}" method="post" th:object="${datos}">
+        <p class="msg error" role="alert" th:if="${#fields.hasAnyErrors()}">Revisa el avatar y el largo de los juegos de interés (máximo 1000 caracteres).</p>
             <label>Usuario</label>
-            <input type="text" th:field="*{username}" disabled>
+            <input type="text" th:value="${usuario.username}" disabled>
 
             <label>Correo</label>
-            <input type="email" th:field="*{email}" disabled>
+            <input type="email" th:value="${usuario.email}" disabled>
 
-            <label>URL del Avatar</label>
-            <input type="text" th:field="*{avatarUrl}" placeholder="https://...">
+            <label for="avatarUrl">Avatar</label>
+<select id="avatarUrl" th:field="*{avatarUrl}"><option value="/images/avatar.svg">Control gamer</option></select>
 
-            <label>Juegos de interés</label>
-            <input type="text" th:field="*{juegosInteres}" placeholder="Valorant, LoL, CS2...">
+            <label for="juegosInteres">Juegos de interés</label>
+<input id="juegosInteres" type="text" th:field="*{juegosInteres}" placeholder="Valorant, LoL, CS2...">
 
             <label>
                 <input type="checkbox" th:field="*{notificarEmail}">
@@ -58,5 +59,6 @@
     </div>
 </main>
 
+<script defer th:src="@{/js/forms.js}"></script>
 </body>
 </html>

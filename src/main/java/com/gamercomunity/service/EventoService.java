@@ -26,7 +26,7 @@ public class EventoService {
 
     public Evento obtenerPorId(Long id) {
         return eventoRepository.findById(id)
-            .orElseThrow(() -> new RuntimeException("Evento no encontrado"));
+            .orElseThrow(() -> new org.springframework.web.server.ResponseStatusException(org.springframework.http.HttpStatus.NOT_FOUND));
     }
 
     public Evento guardar(Evento evento) {
