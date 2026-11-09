@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>Gamer Community - Inicio</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+
+<header class="navbar">
+    <div class="logo">Gamer Community</div>
+
+    <nav>
+        <a th:href="@{/home}">Inicio</a>
+        <a th:href="@{/eventos}">Eventos</a>
+
+        <div sec:authorize="hasRole('ADMIN')">
+            <a th:href="@{/admin}">Administración</a>
+        </div>
+
+        <div sec:authorize="isAuthenticated()"
+             style="display:flex; gap:1.2rem; align-items:center;">
+
+            <a th:href="@{/perfil}">Mi Perfil</a>
+
+            <span sec:authentication="name"
+                  style="color:#7f5af0;font-weight:bold;">
+            </span>
+
+            <form th:action="@{/logout}" method="post">
+                <button type="submit" class="btn-logout">
+                    Cerrar sesión
+                </button>
+            </form>
+        </div>
+
+        <div sec:authorize="isAnonymous()">
+            <a th:href="@{/login}" class="btn-secondary">
+                Iniciar sesión
+            </a>
+
+            <a th:href="@{/registro}" class="btn-primary">
+                Registrarse
+            </a>
+        </div>
+    </nav>
+</header>
+
+<main>
+    <section class="hero">
+        <h1>Bienvenido a Gamer Community</h1>
+        <p>Descubre, comparte y participa en los mejores eventos gamer.</p>
+        <a th:href="@{/eventos}" class="btn-primary">Ver eventos</a>
+    </section>
+
+    <section class="proximos">
+        <h2>Próximos eventos</h2>
+        <div class="eventos-grid">
+            <div class="card" th:each="e : ${eventosProximos}">
+                <h3 th:text="${e.nombre}">Nombre del evento</h3>
+                <p th:text="${e.categoria}">Categoría</p>
+                <p th:text="${#temporals.format(e.fechaHora, 'dd/MM/yyyy HH:mm')}">Fecha</p>
+                <p th:text="${e.direccion}">Dirección</p>
+                <a th:href="@{/eventos/{id}(id=${e.id})}" class="btn-secondary">Ver detalle</a>
+            </div>
+        </div>
+    </section>
+
+    <section class="publicidad">
+        <h2>Marcas asociadas</h2>
+        <div class="marcas">
+            <div class="marca">Razer</div>
+            <div class="marca">Logitech G</div>
+            <div class="marca">HyperX</div>
+            <div class="marca">Red Bull Gaming</div>
+        </div>
+    </section>
+</main>
+
+<footer>
+    <p>© 2026 Gamer Community. Todos los derechos reservados.</p>
+</footer>
+
+</body>
+</html>

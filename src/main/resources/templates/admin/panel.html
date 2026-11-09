@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>Panel de Administración - Gamer Community</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+
+<header class="navbar">
+    <div class="logo">Gamer Community - Admin</div>
+    <nav>
+        <a th:href="@{/home}">Inicio</a>
+        <a th:href="@{/eventos}">Eventos (Vista Cliente)</a>
+        <div sec:authorize="isAuthenticated()" style="display: flex; gap: 1.2rem; align-items: center;">
+            <span style="color: #7f5af0; font-weight: bold;" sec:authentication="name">Usuario</span>
+            <form th:action="@{/logout}" method="post" style="display:inline; margin: 0;">
+                <button type="submit" class="btn-logout">Cerrar sesión</button>
+            </form>
+        </div>
+    </nav>
+</header>
+
+<main>
+    <h1>Panel de Administración</h1>
+
+    <section>
+        <h2>Gestión de Eventos</h2>
+        <a th:href="@{/admin/evento/nuevo}" class="btn-primary" style="margin-bottom: 1rem; display: inline-block;">+ Crear Nuevo Evento</a>
+        
+        <table style="width: 100%; border-collapse: collapse; margin-bottom: 3rem; text-align: left;">
+            <thead>
+                <tr style="border-bottom: 2px solid #7f5af0;">
+                    <th>ID</th>
+                    <th>Nombre</th>
+                    <th>Categoría</th>
+                    <th>Fecha</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="e : ${eventos}" style="border-bottom: 1px solid #2a2a4a;">
+                    <td th:text="${e.id}"></td>
+                    <td th:text="${e.nombre}"></td>
+                    <td th:text="${e.categoria}"></td>
+                    <td th:text="${#temporals.format(e.fechaHora, 'dd/MM/yyyy HH:mm')}"></td>
+                    <td>
+                        <a th:href="@{/admin/evento/editar/{id}(id=${e.id})}" class="btn-secondary" style="padding: 0.2rem 0.5rem; font-size: 0.8rem;">Editar</a>
+                        <a th:href="@{/admin/evento/eliminar/{id}(id=${e.id})}" class="btn-logout" style="padding: 0.2rem 0.5rem; font-size: 0.8rem;" onclick="return confirm('¿Seguro que deseas eliminar este evento?');">Eliminar</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+
+    <section>
+        <h2>Gestión de Usuarios</h2>
+        <table style="width: 100%; border-collapse: collapse; text-align: left;">
+            <thead>
+                <tr style="border-bottom: 2px solid #7f5af0;">
+                    <th>ID</th>
+                    <th>Usuario</th>
+                    <th>Email</th>
+                    <th>Roles Actuales</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="u : ${usuarios}" style="border-bottom: 1px solid #2a2a4a;">
+                    <td th:text="${u.id}"></td>
+                    <td th:text="${u.username}"></td>
+                    <td th:text="${u.email}"></td>
+                    <td>
+                        <span th:each="r : ${u.roles}" th:text="${r.nombre}" style="background: #2a2a4a; padding: 0.2rem 0.5rem; border-radius: 4px; margin-right: 0.2rem; font-size: 0.8rem;"></span>
+                    </td>
+                    <td>
+                        <form th:action="@{/admin/usuario/rol}" method="post" style="display: inline;">
+                            <input type="hidden" name="usuarioId" th:value="${u.id}">
+                            <select name="rol" style="padding: 0.2rem; background: #0f0f1a; color: white; border: 1px solid #7f5af0;">
+                                <option value="ROLE_USER">ROLE_USER</option>
+                                <option value="ROLE_ADMIN">ROLE_ADMIN</option>
+                            </select>
+                            <button type="submit" class="btn-primary" style="padding: 0.2rem 0.5rem; font-size: 0.8rem;">Asignar Rol</button>
+                        </form>
+                        <a th:href="@{/admin/usuario/eliminar/{id}(id=${u.id})}" class="btn-logout" style="padding: 0.2rem 0.5rem; font-size: 0.8rem;" onclick="return confirm('¿Seguro que deseas eliminar esta cuenta?');">Eliminar</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+</main>
+
+</body>
+</html>
